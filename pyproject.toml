@@ -1,0 +1,8 @@
+[project]
+name = "lr2"
+version = "0.1.0"
+description = "Cryptography scripts for lr 2(Stream ciphers): automatic key selection cipher, LFSR"
+requires-python = ">=3.12"
+dependencies = [
+    "python-dotenv>=1.1.1",
+]
