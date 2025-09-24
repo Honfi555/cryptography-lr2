@@ -26,8 +26,8 @@
 Для хранения зависимостей используются файлы pyproject.toml и uv.lock
 Установка зависимостей и настройка виртуального окружения:
 ```bash
-  pip install uv
-  uv sync
+    pip install uv
+    uv sync
 ```
 
 ## Режим запуска
