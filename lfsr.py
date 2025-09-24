@@ -5,8 +5,6 @@ class LFSR:
 	"""
 	Class for generating pseudo-random number in a bit representation.
 	"""
-	state: str = ''
-	tab_bits: list[int] = []
 
 	def __init__(self, init_state: str, tab_bits: list[int]) -> None:
 		if not init_state or not tab_bits:
@@ -17,8 +15,8 @@ class LFSR:
 		if tab_bits[-1] > len(init_state):
 			raise ValueError('tab_bits can only contain integers from 0 to {}'.format(len(init_state)))
 
-		self.state = init_state
-		self.tab_bits = tab_bits
+		self.state: str = init_state
+		self.tab_bits: list[int] = tab_bits
 
 	def _step(self) -> int:
 		new_bit: int = int(self.state[self.tab_bits[0]])
