@@ -1,4 +1,6 @@
-from static import INIT_STATE, TAB_BITS
+from typing import Generator
+
+from static import SEED, TAB_BITS
 
 
 class LFSR:
@@ -6,16 +8,16 @@ class LFSR:
 	Class for generating pseudo-random number in a bit representation.
 	"""
 
-	def __init__(self, init_state: str, tab_bits: list[int]) -> None:
-		if not init_state or not tab_bits:
+	def __init__(self, seed: str, tab_bits: list[int]) -> None:
+		if not seed or not tab_bits:
 			raise ValueError('init_state and tab_bits must be set')
 		if len(tab_bits) < 2:
 			raise ValueError('tab_bits must be at least 2')
 		tab_bits.sort()
-		if tab_bits[-1] > len(init_state):
-			raise ValueError('tab_bits can only contain integers from 0 to {}'.format(len(init_state)))
+		if tab_bits[-1] > len(seed):
+			raise ValueError('tab_bits can only contain integers from 0 to {}'.format(len(seed)))
 
-		self.state: str = init_state
+		self.state: str = seed
 		self.tab_bits: list[int] = tab_bits
 
 	def _step(self) -> int:
@@ -41,20 +43,31 @@ class LFSR:
 
 		return prn
 
+	def lfsr_gen(self) -> Generator[str, None, None]:
+		"""Генерация последовательности с помощью LFSR.
+
+		:return: Генератор псевдослучайной последовательности.
+		:rtype: Str
+		"""
+
+		# for _ in range(len(self.state)):
+		while True:
+			yield str(self._step())
+
 
 def main() -> None:
 	"""Точка запуска файла."""
 
-	print("Начальное состояние:", INIT_STATE)
+	print("Начальное состояние:", SEED)
 
-	lfsr_gen = LFSR(INIT_STATE, TAB_BITS)
+	keystream = LFSR(SEED, TAB_BITS)
 	fake_random_numbers: list[str] = []
-	fake_random_number = lfsr_gen.lfsr()
+	fake_random_number = keystream.lfsr()
 
 	while fake_random_number not in fake_random_numbers:
 		fake_random_numbers.append(fake_random_number)
 		print("Псевдослучайное число:", fake_random_number)
-		fake_random_number = lfsr_gen.lfsr()
+		fake_random_number = keystream.lfsr()
 
 	return None
 

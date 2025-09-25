@@ -18,7 +18,7 @@
 - AKSC_KEY (str)
 
 ### Регистр сдвига с линейной обратной связью(РСЛОС)/Генератор псевдослучайных чисел|Linear Feedback Shift Registers (LFSR)
-- INIT_STATE (str) - binary representation
+- SEED (str) - binary representation
 - TAB_BITS (str) - numbers separated by spaces
 
 
