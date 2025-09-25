@@ -1,49 +1,25 @@
-from typing import Iterable, Iterator
-
-from static import PLAINTEXT, SEED, TAB_BITS
-from lfsr import LFSR
+from static import PLAINTEXT, SSC_KEY as KEY
 
 
-def _bits_to_byte(ks_bits: Iterator[str]) -> int:
-	b = 0
-	for _ in range(8):
-		bit = next(ks_bits)
-		bit = int(bit)
-		b = (b << 1) | (bit & 1)
-	return b
+def encrypt(plaintext: str, key: str) -> str:
+    ciphertext = []
+    for i, ch in enumerate(plaintext):
+        k = key[i % len(key)]
+        ciphertext.append(chr(ord(ch) ^ ord(k)))
+    return "".join(ciphertext)
 
 
-def encrypt_bytes(plaintext: Iterable[int], keystream_bits: Iterator[str]) -> bytes:
-	out = bytearray()
-	for pt_byte in plaintext:
-		ks_byte = _bits_to_byte(keystream_bits)
-		out.append(pt_byte ^ ks_byte)
-	return bytes(out)
-
-
-def decrypt_bytes(cyphertext: Iterable[int], keystream_bits: Iterator[str]) -> bytes:
-	return encrypt_bytes(cyphertext, keystream_bits)
-
-
-def encrypt(text: str, keystream_bits: Iterator[str]) -> bytes:
-	return encrypt_bytes((ord(ch) for ch in text), keystream_bits)
-
-
-def decrypt(cipher: bytes, keystream_bits: Iterator[str]) -> str:
-	return "".join(chr(b) for b in encrypt_bytes(cipher, keystream_bits))
+def decrypt(ciphertext: str, key: str) -> str:
+    return encrypt(ciphertext, key)
 
 
 def main() -> None:
-	"""Точка запуска файла."""
-
-	lfsr = LFSR(seed=SEED, tab_bits=TAB_BITS)
-	print("Открытое сообщение: ", PLAINTEXT)
-	print("Зашифрованные данные: ", encoded_data := encrypt(PLAINTEXT, lfsr.lfsr_gen()).hex())
-	lfsr = LFSR(seed=SEED, tab_bits=TAB_BITS)
-	print("Дешифрованные данные: ", decrypt(bytes.fromhex(encoded_data), lfsr.lfsr_gen()))
-
-	return None
+    print("Открытое сообщение:", PLAINTEXT)
+    encoded = encrypt(PLAINTEXT, KEY)
+    print("Зашифрованные данные (в hex):", encoded.encode().hex())
+    decoded = decrypt(encoded, KEY)
+    print("Дешифрованные данные:", decoded)
 
 
 if __name__ == "__main__":
-	main()
+    main()

@@ -15,3 +15,5 @@ ALFABET_POWER: int = int(os.getenv('ALFABET_POWER'))
 
 SEED: str = os.getenv('SEED')
 TAB_BITS: list[int] = list(map(int, os.getenv('TAB_BITS').split()))
+
+SSC_KEY: str = os.getenv('SSC_KEY')
