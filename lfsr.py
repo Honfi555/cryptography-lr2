@@ -50,7 +50,6 @@ class LFSR:
 		:rtype: Str
 		"""
 
-		# for _ in range(len(self.state)):
 		while True:
 			yield str(self._step())
 
